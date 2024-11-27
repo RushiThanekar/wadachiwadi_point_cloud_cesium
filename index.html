@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.118/Build/Cesium/Cesium.js"></script>
+  <link href="https://cesium.com/downloads/cesiumjs/releases/1.118/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+  <!-- <link href="style.css" rel="stylesheet"> -->
+  <style>
+    html,
+    body {
+  overflow: hidden;
+  margin: 0px;
+  padding: 0px;
+  height: 100vh;
+}
+  </style>
+
+<style type="text/css">
+
+  #toggle-PC { z-index: 1; position: fixed; top: 5px; left: 5px;    background-color: #008CBA; 
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;}
+
+  #toggle-roads { z-index: 1; position: fixed; top: 60px; left: 5px;    background-color: #008CBA; 
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  width: 147px;
+  font-size: 16px;}
+
+  #toggle-pipes { z-index: 1; position: fixed; top: 115px; left: 5px;    background-color: #008CBA; 
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  width: 147px;
+  font-size: 16px;}
+</style>
+</head>
+
+
+<body>
+  <button id="toggle-PC">Point Cloud</button>
+  <button id="toggle-roads">Roads</button>
+  <button id="toggle-pipes">Pipes</button>
+
+  <div style="display: flex; align-items: center; justify-content: center ; height: 100px; width: 81%; background: linear-gradient(#3c505500,#0f171a00); position: absolute; z-index: 1; font-family: sans-serif; color: white; font-size: 50px; letter-spacing: 30px; right: 10.5%;  ">
+    <div style="height: 60px; width: 60px; margin-right: 30px; background-image: url(PMRDA_logo.jpg); background-size: cover;"></div>PMRDA</div>
+
+  <div id="cesiumContainer"></div>
+  <script type="module">
+
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiMTIyNTY2NC04MmQ2LTQxMDMtODBhNS1kOGYyOTVhOTc5NDIiLCJpZCI6MjU4MzA1LCJpYXQiOjE3MzI2ODQ4ODh9.uZKzKms-amqaLlTf264kD8qlccXThSIny3vJY6kv6fE';
+
+    const viewer = new Cesium.Viewer('cesiumContainer', {
+      terrain: Cesium.Terrain.fromWorldTerrain(),
+    });
+
+    // Fly the camera to Denver, Colorado at the given longitude, latitude, and height.
+    viewer.camera.flyTo({
+      destination: Cesium.Cartesian3.fromDegrees(73.928811, 18.438549, 700),
+      orientation: {
+        heading: Cesium.Math.toRadians(-120),
+        pitch: Cesium.Math.toRadians(-1.0),
+      }
+    });
+    // Add Cesium OSM Buildings.
+
+    
+    const tileset = viewer.scene.primitives.add(
+  await Cesium.Cesium3DTileset.fromIonAssetId(2872833),
+);
+
+  const tileset1 = viewer.scene.primitives.add(
+  await Cesium.Cesium3DTileset.fromIonAssetId(2873420),
+);
+
+const pipes = viewer.scene.primitives.add(
+  await Cesium.Cesium3DTileset.fromIonAssetId(2873528),
+);
+
+
+document.querySelector('#toggle-roads').onclick = function() {
+  tileset1.show = !tileset1.show;
+};
+
+document.querySelector('#toggle-PC').onclick = function() {
+  tileset.show = !tileset.show;
+};
+
+document.querySelector('#toggle-pipes').onclick = function() {
+  pipes.show = !pipes.show;
+};
+
+  </script>
+</body>
+</html>
